@@ -18,7 +18,7 @@ namespace BombParty
         private string char1;
         private string char2;
         private string answer;
-        private int currentNumber = 7 + 1;
+        private int bombTimer = 7 + 1;
         private System.Windows.Forms.Timer timer;
 
 
@@ -26,7 +26,6 @@ namespace BombParty
         public Form1()
         {
             InitializeComponent();
-            promptGeneration();
 
             
 
@@ -34,14 +33,21 @@ namespace BombParty
             timer.Interval = 1000; // 1000 milliseconds = 1 second
             timer.Tick += Timer_Tick;
 
-            // Start the timer
-            timer.Start();
+            
+
+            promptGeneration();
+
+            
+
 
 
         }
 
         private void promptGeneration()
         {
+
+            timer.Start();
+
             Random random = new Random();
 
 
@@ -60,24 +66,30 @@ namespace BombParty
 
             label1.Text = wordPrompt;
 
+            
+
         }
 
         private void Timer_Tick(object sender, EventArgs e)
 
         {
+
+
+
             // Decrease the current number by 1
 
 
-            currentNumber--;
+            bombTimer--;
 
             // Display the current number
-            label3.Text = currentNumber.ToString();
+            label3.Text = bombTimer.ToString();
 
             // Check if the current number is 0
-            if (currentNumber <= 0)
+            if (bombTimer == 0)
             {
                 // Stop the timer
                 timer.Stop();
+                
 
 
             }
@@ -106,8 +118,14 @@ namespace BombParty
                 {
                     label2.Text = ($"The word '{answer}' is valid.");
 
+
+                    textBox1.Clear();
+
+                   
+
                     promptGeneration();
 
+                    
 
 
 
@@ -161,7 +179,10 @@ namespace BombParty
            
         }
 
-        
+        private void label2_Click_1(object sender, EventArgs e)
+        {
+
+        }
     }
 
 }

@@ -37,9 +37,9 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(311, 173);
+            this.textBox1.Location = new System.Drawing.Point(257, 168);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
+            this.textBox1.Size = new System.Drawing.Size(308, 20);
             this.textBox1.TabIndex = 0;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPress);
@@ -47,7 +47,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(339, 105);
+            this.label1.Location = new System.Drawing.Point(385, 69);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 1;
@@ -56,30 +56,30 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(339, 24);
+            this.label3.Location = new System.Drawing.Point(385, 21);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(35, 13);
+            this.label3.Size = new System.Drawing.Size(0, 13);
             this.label3.TabIndex = 3;
-            this.label3.Text = "label3";
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(320, 230);
+            this.button1.Location = new System.Drawing.Point(367, 225);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 4;
-            this.button1.Text = "button1";
+            this.button1.Text = "Confirm";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(338, 301);
+            this.label2.Location = new System.Drawing.Point(385, 305);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 13);
             this.label2.TabIndex = 5;
             this.label2.Text = "label2";
+            this.label2.Click += new System.EventHandler(this.label2_Click_1);
             // 
             // Form1
             // 
