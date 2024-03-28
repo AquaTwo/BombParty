@@ -18,6 +18,7 @@ namespace BombParty
         private string char1;
         private string char2;
         private string answer;
+        private int initialBombtimer = 7+1;
         private int bombTimer = 7 + 1;
         private System.Windows.Forms.Timer timer;
 
@@ -45,6 +46,7 @@ namespace BombParty
 
         private void promptGeneration()
         {
+            bombTimer = initialBombtimer;
 
             timer.Start();
 
@@ -89,6 +91,10 @@ namespace BombParty
             {
                 // Stop the timer
                 timer.Stop();
+
+                label2.Text = ("The bomb exploded");
+
+                button1.Enabled = false;
                 
 
 
@@ -114,22 +120,25 @@ namespace BombParty
                 string apiUrl = $"https://api.dictionaryapi.dev/api/v2/entries/en_US/{answer}";
                 HttpResponseMessage response = client.GetAsync(apiUrl).Result;
 
-                if (response.IsSuccessStatusCode && CheckWordPresence(answer, wordPrompt))
+                if (response.IsSuccessStatusCode && CheckWordPresence(answer, wordPrompt) && bombTimer > 0)
                 {
                     label2.Text = ($"The word '{answer}' is valid.");
 
 
                     textBox1.Clear();
 
-                   
+
 
                     promptGeneration();
 
-                    
+
 
 
 
                 }
+
+
+
                 else
                 {
                     // If the API returns an error response, the word is considered invalid
@@ -168,7 +177,7 @@ namespace BombParty
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char)Keys.Enter)
+            if (e.KeyChar == (char)Keys.Enter && bombTimer > 0)
             {
                 button1_Click(sender, e);
             }
