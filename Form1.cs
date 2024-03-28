@@ -5,6 +5,8 @@ using Microsoft.VisualBasic;
 using System.Windows.Forms;
 using System.Reflection.Emit;
 using System.Collections.Generic;
+using System.Linq;
+using System.Drawing;
 
 
 namespace BombParty
@@ -21,8 +23,10 @@ namespace BombParty
         private string answer;
         private int initialBombtimer = 7+1;
         private int bombTimer = 7 + 1;
+        private int lives = 3;
         private System.Windows.Forms.Timer timer;
-        private List<string> enteredWords = new List<string>(); 
+        private List<string> enteredWords = new List<string>();
+        private HashSet<char> usedLetters = new HashSet<char>();
 
 
 
@@ -37,14 +41,66 @@ namespace BombParty
             timer.Interval = 1000; // 1000 milliseconds = 1 second
             timer.Tick += Timer_Tick;
 
-            
 
+            initializeAlphabetLabels();
             promptGeneration();
 
             
 
 
 
+        }
+        private void initializeAlphabetLabels()
+        {
+            int rowCount = (int)Math.Ceiling((double)alphabet.Length / 2);
+
+            for (int row = 0; row < rowCount; row++)
+            {
+                System.Windows.Forms.Label label1 = new System.Windows.Forms.Label();
+                label1.Text = alphabet[row];
+                label1.Padding = new Padding(4);
+                label1.AutoSize = false;
+                label1.Size = new Size(25, 25); // Adjust size as needed
+                label1.Top = row * 30; // Adjust spacing as needed
+                label1.Left = 10;
+                label1.TextAlign = ContentAlignment.MiddleCenter;
+                label1.BorderStyle = BorderStyle.FixedSingle; // Optional: Add border for better visibility
+                label1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right; // Anchor to maintain position
+
+                // Rotate text 90 degrees
+                label1.Paint += (sender, e) =>
+                {
+                    e.Graphics.TranslateTransform(label1.Width, label1.Height);
+                    e.Graphics.RotateTransform(-90);
+                    e.Graphics.DrawString(label1.Text, label1.Font, Brushes.Black, 0, 0);
+                };
+
+                Controls.Add(label1);
+
+                if (row + rowCount < alphabet.Length)
+                {
+                    System.Windows.Forms.Label label2 = new System.Windows.Forms.Label();
+                    label2.Text = alphabet[row + rowCount];
+                    label2.Padding = new Padding(4);
+                    label2.AutoSize = false;
+                    label2.Size = new Size(25, 25); // Adjust size as needed
+                    label2.Top = row * 30; // Adjust spacing as needed
+                    label2.Left = label1.Width + 20;
+                    label2.TextAlign = ContentAlignment.MiddleCenter;
+                    label2.BorderStyle = BorderStyle.FixedSingle; // Optional: Add border for better visibility
+                    label2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right; // Anchor to maintain position
+
+                    // Rotate text 90 degrees
+                    label2.Paint += (sender, e) =>
+                    {
+                        e.Graphics.TranslateTransform(label2.Width, label2.Height);
+                        e.Graphics.RotateTransform(-90);
+                        e.Graphics.DrawString(label2.Text, label2.Font, Brushes.Black, 0, 0);
+                    };
+
+                    Controls.Add(label2);
+                }
+            }
         }
 
         private void promptGeneration()
@@ -73,6 +129,9 @@ namespace BombParty
 
             
 
+
+            
+
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -88,19 +147,34 @@ namespace BombParty
 
             // Display the current number
             label3.Text = bombTimer.ToString();
+            label4.Text = ($"Lives: {lives}");
 
             // Check if the current number is 0
             if (bombTimer == 0)
             {
-                // Stop the timer
                 timer.Stop();
+                promptGeneration();
+                
 
-                label2.Text = ("The bomb exploded");
+                lives = lives - 1;
+                // Stop the timer
+                
 
-                button1.Enabled = false;
+                
+
                 
 
 
+
+            }
+            else if (/*bombTimer == 0 && */lives == -1)
+            {
+                timer.Stop();
+                label2.Text = ("The bomb exploded");
+
+                button1.Enabled = false;
+
+                
             }
         }
 
@@ -125,7 +199,15 @@ namespace BombParty
 
                 if (response.IsSuccessStatusCode && CheckWordPresence(answer, wordPrompt) && bombTimer > 0 && !enteredWords.Contains(answer))
                 {
+                    if (usedLetters.Count == alphabet.Length)
+                    {
+                        lives++;
+                        resetUsedLetters();
+                    }
+
                     enteredWords.Add(answer);
+                    updateUsedLetters(answer);
+                    updateAlphabetColors();
 
 
                     label2.Text = ($"The word '{answer}' is valid.");
@@ -136,6 +218,8 @@ namespace BombParty
 
 
                     promptGeneration();
+
+                    
 
 
 
@@ -154,6 +238,36 @@ namespace BombParty
 
             }
 
+        }
+        private void resetUsedLetters()
+        {
+            usedLetters.Clear();
+        }
+        private void updateUsedLetters(string word)
+        {
+            foreach (char c in word)
+            {
+                usedLetters.Add(c);
+            }
+        }
+        private void updateAlphabetColors()
+        {
+            foreach (Control control in Controls)
+            {
+                if (control is System.Windows.Forms.Label label && alphabet.Contains(label.Text))
+                {
+                    if (usedLetters.Contains(label.Text[0]))
+                    {
+                        label.BackColor = System.Drawing.Color.Gray;
+
+
+                    }
+                    else
+                    {
+                        label.BackColor = System.Drawing.Color.Yellow;
+                    }
+                }
+            }
         }
         static bool CheckWordPresence(string answer, string wordPrompt)
         {
@@ -200,6 +314,16 @@ namespace BombParty
         }
 
         private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
         {
 
         }
