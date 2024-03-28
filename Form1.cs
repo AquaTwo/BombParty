@@ -4,6 +4,7 @@ using System.Net.Http;
 using Microsoft.VisualBasic;
 using System.Windows.Forms;
 using System.Reflection.Emit;
+using System.Collections.Generic;
 
 
 namespace BombParty
@@ -21,6 +22,8 @@ namespace BombParty
         private int initialBombtimer = 7+1;
         private int bombTimer = 7 + 1;
         private System.Windows.Forms.Timer timer;
+        private List<string> enteredWords = new List<string>(); 
+
 
 
 
@@ -120,8 +123,11 @@ namespace BombParty
                 string apiUrl = $"https://api.dictionaryapi.dev/api/v2/entries/en_US/{answer}";
                 HttpResponseMessage response = client.GetAsync(apiUrl).Result;
 
-                if (response.IsSuccessStatusCode && CheckWordPresence(answer, wordPrompt) && bombTimer > 0)
+                if (response.IsSuccessStatusCode && CheckWordPresence(answer, wordPrompt) && bombTimer > 0 && !enteredWords.Contains(answer))
                 {
+                    enteredWords.Add(answer);
+
+
                     label2.Text = ($"The word '{answer}' is valid.");
 
 
